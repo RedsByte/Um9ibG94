@@ -186,7 +186,7 @@ local shf = [[
 ]]
 q(shf)
 
-local v = 1273 -- Target game version
+local v = 3427 -- Target game version
 local lastHopAttempt = 0
 
 local function sh()
