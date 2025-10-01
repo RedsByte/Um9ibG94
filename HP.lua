@@ -1,7 +1,6 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- a simple old server finder in grow a garden. made by  Reds4358 (in discord)
--- MODIFIED TO REMOVE BLOODMOON FEATURES
 -- u can modify this however you want! :)
 -- credits to infinite yield for serverhop function
 -- sub to my channel:
@@ -181,14 +180,12 @@ local shf = [[
     if not _G.exeonce then
         _G.exeonce = true
         repeat task.wait() until game:IsLoaded()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/RedsByte/Um9ibG94/refs/heads/main/HP.lua"))()
+        loadstring(game:HttpGet:("https://raw.githubusercontent.com/RedsByte/Um9ibG94/refs/heads/main/HP.lua"))()
     end
 ]]
 q(shf)
 
-local v = 3427 -- Target game version
 local lastHopAttempt = 0
-
 local function sh()
     if os.time() - lastHopAttempt < 5 then
         nt("Please Wait", "Server hop cooldown...")
@@ -225,51 +222,44 @@ local function sh()
     end
 
     local list = {}
-    for _, srv in ipairs(data.data) do
-        if type(srv) == "table" and srv.id ~= game.JobId then
-            local playing = tonumber(srv.playing) or 0
-            local max = tonumber(srv.maxPlayers) or 100
-            local placeVersion = srv.placeVersion or 0
-            if playing < max and placeVersion <= v then -- Check if server version is old enough
-                table.insert(list, srv.id)
+    for _, v in ipairs(data.data) do
+        if type(v) == "table" and v.id ~= game.JobId then
+            local playing = tonumber(v.playing) or 0
+            local max = tonumber(v.maxPlayers) or 100
+            local placeVersion = v.placeVersion or 0
+            if playing < max and placeVersion <= 1231 then
+                table.insert(list, v.id)
             end
         end
     end
 
     if #list > 0 then
-        nt("Server Hop", "Teleporting to an older server...")
+        nt("Server Hop", "Teleporting to better server...")
         task.wait(0.5)
         tp:TeleportToPlaceInstance(game.PlaceId, list[math.random(#list)])
         return true
     else
-        nt("No Servers", "No available old servers found")
+        nt("No Servers", "No available servers found")
         return false
     end
 end
 
--- --- MAIN LOGIC ---
+local v = 3435
 local isOld = game.PlaceVersion <= v
 
 if isOld then
-    nt("Old Server Found!", "Version: "..game.PlaceVersion..". Staying in this server.")
-    local e = prompt("OLD SERVER FOUND", "You are in an old server (v"..game.PlaceVersion.."). Do you want to hop to another old server anyway?")
+    nt("Perfect Server!", "Old version ("..game.PlaceVersion..") detected!")
+else
+    nt("New Server Detected!", "Version: " .. game.PlaceVersion)
+    local e = prompt("NEW SERVER DETECTED", "Would you like to server-hop to find an old server?")
     if e then
-        nt("Server-hop accepted.", "Looking for another old server...")
+        nt("Server-hop accepted.", "Looking for an old server...")
         local success = sh()
         if not success then
             task.wait(5)
             sh()
         end
     else
-        nt("Server-hop declined.", "Staying in this server.")
-    end
-else
-    nt("New Server Detected!", "Version: " .. game.PlaceVersion)
-    task.wait(0.5)
-    nt("Searching...", "Looking for an old server...")
-    local success = sh()
-    if not success then
-        task.wait(5)
-        sh()
+        nt("Server-hop declined.", "Staying in current server.")
     end
 end
