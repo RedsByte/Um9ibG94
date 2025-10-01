@@ -170,7 +170,7 @@ function nt(n, c)
         Time = 6
     })
 end
-local gagid = 126884695634066
+local gagid = 127742093697776
 if game.PlaceId ~= gagid then
    nt("Wrong Game", "This script is for Grow a Garden only!")
    return
